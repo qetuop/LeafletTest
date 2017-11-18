@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html>
+
+
+<head>
+
+<title>Leaflet Web Map</title>
+
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+
+<style>
+
+#map {
+width: 960px;
+height: 500px;
+}
+.custom .leaflet-popup-tip,
+.custom .leaflet-popup-content-wrapper {
+    background: #e93434;
+    color: #ffffff;
+}
+</style>
+
+</head>
+
+
+
+<body>
+
+<div id="map"></div>
+
+<script>
+    //var map = L.map('map',{center: [43.64701, -79.39425],zoom: 15});
+    var map = L.map('map',{scrollWheelZoom:true}).setView([43.64701, -79.39425], 3);
+
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    L.tileLayer.wms("http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi", {
+    	    layers: 'nexrad-n0r-900913',
+            format: 'image/png',
+            transparent: true,
+            attribution: "Weather data © 2012 IEM Nexrad"
+        }).addTo(map);
+
+    var firefoxIcon = L.icon({
+        iconUrl: 'http://joshuafrazier.info/images/firefox.svg',
+        iconSize: [38, 95], // size of the icon
+        });
+
+    L.marker([43.64701, -79.39425], {icon: firefoxIcon}).bindPopup('Mozilla Toronto Office').addTo(map);
+
+// Create an Empty Popup
+var popup = L.popup();
+
+// Write function to set Properties of the Popup
+function onMapClick(e) {
+    popup
+        .setLatLng(e.latlng)
+        .setContent("You clicked the map at " + e.latlng.toString())
+        .openOn(map);
+}
+
+// Listen for a click event on the Map element
+map.on('click', onMapClick);
+
+</script>
+</body>
+
+
+</html>
